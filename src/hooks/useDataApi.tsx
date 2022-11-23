@@ -10,7 +10,6 @@ const useDataApi = () => {
       'https://script.google.com/macros/s/AKfycbwtkuS_Es_MGF7VvfOnWsQ8hmCgBm49fIuQeW0JhoMgf6rnlzC4FKWO3zoIlGFSTkEU/exec',
     );
     const resJSON = await res.json();
-    // console.log(resJSON);
     setData(resJSON.data);
     setisLoading(false);
   };

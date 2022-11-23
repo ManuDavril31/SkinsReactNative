@@ -1,43 +1,40 @@
 import {StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ButtonCustom from '../components/ButtonCustom';
-import useDataApi from '../hooks/useDataApi';
-import {Skins} from '../interfaces/InterfaceDataAPI';
 import {FlashList} from '@shopify/flash-list';
 import {DrawerScreenProps} from '@react-navigation/drawer';
 import {RootStackParams} from '../navigations/StackNavigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ModalViewSkin from '../components/ModalViewSkin';
 import {useSpreedSheet} from '../hooks/useSpreedSheet';
+import {Row} from '../interfaces/SpreedSheetApi';
 
 interface PropsItem {
-  item: Skins;
+  item: Row;
 }
 
 interface Props extends DrawerScreenProps<RootStackParams, 'HomeScreen'> {}
 
 const HomeScreen = ({navigation}: Props) => {
-  const {setData, data, isLoading} = useDataApi();
+  const {data, setData, isLoading} = useSpreedSheet();
   const [visible, setVisible] = useState(false);
   const [item, setItem] = useState('');
 
-  ///
-  const {datas} = useSpreedSheet();
-  const handleChange = (item: Skins) => {
+  const handleChange = (item: Row) => {
     data.find((elem, index) => {
-      if (elem.ID === item.ID) {
+      if (elem.c[0].v === item.c[0].v) {
         const newData = [...data];
-        newData[index].STATUS = true;
+        newData[index].c[4].v = true;
         setData(newData);
       }
     });
   };
 
-  const handleChangeRemove = (item: Skins) => {
+  const handleChangeRemove = (item: Row) => {
     data.find((ele, index) => {
-      if (ele.ID === item.ID) {
+      if (ele.c[0].v === item.c[0].v) {
         const newData = [...data];
-        newData[index].STATUS = false;
+        newData[index].c[4].v = false;
         setData(newData);
       }
     });
@@ -46,19 +43,19 @@ const HomeScreen = ({navigation}: Props) => {
   const renderItem = ({item}: PropsItem) => {
     return (
       <ButtonCustom
-        title={item.TITULOS}
-        image={item.IMAGENES}
-        key={item.ID}
+        title={String(item.c[2].v)}
+        image={String(item.c[1].v)}
+        key={item.c[0].v.toString()}
         funtion={() => {
-          // navigation.navigate('VisorSkinScreen', {
-          //   skin: item.DESCARGAR,
-          //   name: item.TITULOS,
-          // });
-          setItem(item.DESCARGAR);
-          setVisible(true);
+          navigation.navigate('VisorSkinScreen', {
+            skin: String(item.c[3].v),
+            name: String(item.c[2].v),
+          });
+          // setItem(String(item.c[3].v));
+          // setVisible(true);
         }}
         iconFunction={() => handleChange(item)}
-        icono={item.STATUS === true ? 'heart' : 'heart-outline'}
+        icono={item.c[4].v === true ? 'heart' : 'heart-outline'}
         iconFuntionRemove={() => handleChangeRemove(item)}
       />
     );
@@ -84,7 +81,7 @@ const HomeScreen = ({navigation}: Props) => {
       <FlashList
         data={data}
         renderItem={renderItem}
-        keyExtractor={item => item.ID.toString()}
+        keyExtractor={item => item.c[0].v.toString()}
         showsVerticalScrollIndicator={false}
         numColumns={2}
         estimatedItemSize={1000}
