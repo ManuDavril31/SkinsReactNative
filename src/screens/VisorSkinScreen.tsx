@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
@@ -6,7 +7,6 @@ import {
   Text,
   View,
   Switch,
-  Alert,
 } from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../navigations/StackNavigation';
@@ -14,7 +14,7 @@ import WebView from 'react-native-webview';
 
 import RadioButton from '../components/RadioButton';
 import ButtonActions from '../components/ButtonActions';
-import {saveImage} from '../funtions/saveToGallery';
+import {saveImage} from '../helpers/saveToGallery';
 
 interface Props extends StackScreenProps<RootStackParams, 'VisorSkinScreen'> {}
 

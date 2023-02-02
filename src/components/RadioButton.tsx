@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
 import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -6,6 +9,7 @@ interface Props {
   options: Array<string>;
   horizontal: boolean;
   selected: number;
+  position?: boolean;
   onChangeSelect: (i: number) => void;
 }
 
@@ -13,10 +17,12 @@ const RadioButton = ({
   options,
   horizontal = false,
   selected,
+  position = false,
   onChangeSelect,
 }: Props) => {
   return (
-    <View style={horizontal && styles.horizontal}>
+    <View
+      style={[horizontal && styles.horizontal, position && styles.positionAbs]}>
       {options.map((opt, index) => (
         <TouchableOpacity
           style={[
@@ -81,5 +87,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     marginLeft: 7,
+  },
+  positionAbs: {
+    position: 'absolute',
+    top: 0,
+    left: 10,
+    zIndex: 2,
   },
 });

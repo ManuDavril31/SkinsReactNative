@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Text,
   TouchableOpacity,
@@ -7,7 +8,6 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Skins} from '../interfaces/InterfaceDataAPI';
 
 const width = Dimensions.get('window').width - 40;
 
