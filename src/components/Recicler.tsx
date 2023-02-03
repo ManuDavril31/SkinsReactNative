@@ -9,7 +9,9 @@ import {AuthContext} from '../context/AuthContext';
 interface Props {
   data: Row[];
   isLoading: boolean;
-  setData: (skin: Row[]) => void;
+  // setData: (skin: Row[]) => void;
+  onFavorite: (skin: Row) => void;
+  onRemove: (skin: Row) => void;
 }
 
 interface PropsItem {
@@ -19,29 +21,29 @@ interface PropsItem {
 const height = Dimensions.get('window').height / 2 - 50;
 const width = Dimensions.get('window').width; // - 55
 
-export const Recicler = ({data, isLoading, setData}: Props) => {
+export const Recicler = ({data, isLoading, onFavorite, onRemove}: Props) => {
   //const [stateSkin, setStateSkin] = useState('');
   const {uriSkin, nameSkin, onChange} = useContext(AuthContext);
 
-  const handleChange = (skin: Row) => {
-    data.find((elem, index) => {
-      if (elem.c[0].v === skin.c[0].v) {
-        const newData = [...data];
-        newData[index].c[4].v = true;
-        setData(newData);
-      }
-    });
-  };
+  // const handleChange = (skin: Row) => {
+  //   data.find((elem, index) => {
+  //     if (elem.c[0].v === skin.c[0].v) {
+  //       const newData = [...data];
+  //       newData[index].c[4].v = true;
+  //       setData(newData);
+  //     }
+  //   });
+  // };
 
-  const handleChangeRemove = (skin: Row) => {
-    data.find((ele, index) => {
-      if (ele.c[0].v === skin.c[0].v) {
-        const newData = [...data];
-        newData[index].c[4].v = false;
-        setData(newData);
-      }
-    });
-  };
+  // const handleChangeRemove = (skin: Row) => {
+  //   data.find((ele, index) => {
+  //     if (ele.c[0].v === skin.c[0].v) {
+  //       const newData = [...data];
+  //       newData[index].c[4].v = false;
+  //       setData(newData);
+  //     }
+  //   });
+  // };
 
   const renderItem = ({item}: PropsItem) => {
     return (
@@ -53,9 +55,9 @@ export const Recicler = ({data, isLoading, setData}: Props) => {
           // setStateSkin(String(item.c[3].v));
           onChange(String(item.c[3].v), String(item.c[2].v));
         }}
-        iconFunction={() => handleChange(item)}
+        iconFunction={() => onFavorite(item)}
         icono={item.c[4].v === true ? 'heart' : 'heart-outline'}
-        iconFuntionRemove={() => handleChangeRemove(item)}
+        iconFuntionRemove={() => onRemove(item)}
       />
     );
   };

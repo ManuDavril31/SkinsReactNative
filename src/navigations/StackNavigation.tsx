@@ -3,7 +3,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import VisorSkinScreen from '../screens/VisorSkinScreen';
-import {SkinScreen} from '../screens/SkinScreen';
+import FavoriteScreen from '../screens/FavoriteScreen';
 
 export type RootStackParams = {
   HomeScreen: undefined;
@@ -11,7 +11,7 @@ export type RootStackParams = {
     skin: string;
     name: string;
   };
-  SkinScreen: undefined;
+  FavoriteScreen: undefined;
 };
 
 const Stack = createStackNavigator();
@@ -31,7 +31,7 @@ const StackNavigation = () => {
       }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="VisorSkinScreen" component={VisorSkinScreen} />
-      <Stack.Screen name="SkinScreen" component={SkinScreen} />
+      <Stack.Screen name="FavoriteScreen" component={FavoriteScreen} />
     </Stack.Navigator>
   );
 };

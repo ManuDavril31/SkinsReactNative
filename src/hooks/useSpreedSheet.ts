@@ -18,7 +18,6 @@ export const useSpreedSheet = () => {
       const text = await res.text();
       const transformJSON = JSON.parse(text.substring(47).slice(0, -2));
       setData(transformJSON.table.rows);
-      console.log(JSON.stringify(transformJSON.table.rows));
       setIsLoading(false);
     } catch (error) {
       Alert.alert(
