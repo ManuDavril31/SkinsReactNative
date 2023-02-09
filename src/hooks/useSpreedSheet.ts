@@ -32,5 +32,13 @@ export const useSpreedSheet = () => {
     fetchApi();
   }, []);
 
+  // useEffect(() => {
+  //   const fetcDB = async () => {
+  //     const getSkinsDB = await getListSkins();
+  //     setDataLocal(getSkinsDB);
+  //   };
+  //   fetcDB();
+  // }, []);
+
   return {data, setData, isLoading};
 };

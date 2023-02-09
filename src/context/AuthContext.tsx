@@ -1,7 +1,6 @@
 import React, {createContext, useState} from 'react';
 import {useSpreedSheet} from '../hooks/useSpreedSheet';
 import {Row} from '../interfaces/SpreedSheetApi';
-
 //Definir como luce, que informacion tendre aquí
 // export interface AuthState {
 //   uriSkin: string;
@@ -43,7 +42,7 @@ export const AuthProvider = ({children}: any) => {
   });
   const {uriSkin, nameSkin} = skinUrl;
 
-  const onChange = (skin: string, name: string) => {
+  const onChange = (skin: string = uriSkin, name: string = nameSkin) => {
     setSkinUrl({uriSkin: skin, nameSkin: name});
   };
 

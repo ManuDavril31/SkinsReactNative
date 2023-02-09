@@ -6,7 +6,7 @@ import {SkinView} from '../components/visorScreen/SkinView';
 import {deleteSkin, getListSkins} from '../data/DB';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../navigations/StackNavigation';
-import {Dimensions} from 'react-native';
+import {Dimensions, Text, StyleSheet, View} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 
 interface PropsItem {
@@ -38,16 +38,6 @@ const FavoriteScreen = ({navigation}: Props) => {
   //       setData(newData);
   //     }
   //   });
-  // };
-
-  // const handleChangeRemove = (skin: Row) => {
-  //   data.find((ele, index) => {
-  //     if (ele.c[0].v === skin.c[0].v) {
-  //       const newData = [...data];
-  //       newData[index].c[4].v = false;
-  //       setData(newData);
-  //     }
-  //   });g
   // };
 
   useEffect(() => {
@@ -119,30 +109,48 @@ const FavoriteScreen = ({navigation}: Props) => {
 
   return (
     <>
-      <SkinView alto={height} ancho={width} skin={uriSkin} name={nameSkin} />
-      <FlashList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={skin => skin.id.toString()}
-        showsVerticalScrollIndicator={false}
-        numColumns={2}
-        estimatedItemSize={1000}
-      />
+      {data.length > 0 ? (
+        <>
+          <SkinView
+            alto={height}
+            ancho={width}
+            skin={uriSkin}
+            name={nameSkin}
+          />
+          <FlashList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={skin => skin.id.toString()}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            estimatedItemSize={1000}
+          />
+        </>
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.containerText}>
+            Aun no tienes Skins favoritas, ¡puedes agregar una ahora mismo!
+          </Text>
+        </View>
+      )}
     </>
   );
 };
 
 export default FavoriteScreen;
 
-// const styles = StyleSheet.create({
-//   HomeContainer: {
-//     // flex: 1,
-//     // flexDirection: 'row',
-//     // flexWrap: 'wrap',
-//   },
-//   Menu: {
-//     marginLeft: 20,
-//     marginRight: 10,
-//   },
-// });
-// //
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  containerText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 18,
+  },
+});
+//

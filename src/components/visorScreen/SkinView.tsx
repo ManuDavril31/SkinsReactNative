@@ -11,6 +11,7 @@ interface Props {
   alto: number;
   skin: string;
   name: string;
+  onSkin?: () => void;
 }
 
 export const SkinView = ({alto, ancho, skin, name}: Props) => {
@@ -43,15 +44,9 @@ export const SkinView = ({alto, ancho, skin, name}: Props) => {
     );
   };
 
-  const upLoadSkinDevice = () => {
-    webRef.current.injectJavaScript(
-      `document.getElementById('skin_url_upload').click();`,
-    );
-  };
-
   const onResetSkin = () => {
     webRef.current.injectJavaScript(
-      `document.getElementById('skin_url').value = '${skin}'; reloadSkin(); document.getElementById('nametag_text').value = 'Steve'; reloadNameTag();`,
+      `document.getElementById('skin_url').value = '${skin}'; reloadSkin();`,
     );
   };
 
@@ -77,9 +72,6 @@ export const SkinView = ({alto, ancho, skin, name}: Props) => {
       />
       <TouchableOpacity onPress={onTurn} style={styles.iconTurn}>
         <Icon name="sync-outline" size={30} color="#fff" />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={upLoadSkinDevice} style={styles.iconUpload}>
-        <Icon name="cloud-upload-outline" size={30} color="#fff" />
       </TouchableOpacity>
       <WebView
         ref={webRef}

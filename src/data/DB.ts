@@ -1,8 +1,10 @@
+/* eslint-disable curly */
 import {
   enablePromise,
   openDatabase,
   SQLiteDatabase,
 } from 'react-native-sqlite-storage';
+import {Row} from '../interfaces/SpreedSheetApi';
 import {Skins} from '../screens/FavoriteScreen';
 
 // Definir nombre de la base de datos
@@ -82,10 +84,26 @@ export const deleteSkin = async (id: number) => {
 };
 
 //COMPROBAR SI ESTA EN LA BASE DE DATOS
-export const verifySkin = async (id: number) => {
+// export const verifySkin = async (id: number) => {
+//   const db = await getDbConnection();
+//   const verifyQuery = `SELECT id FROM ${tableName} WHERE id = ${id}`;
+//   const result = await db.executeSql(verifyQuery);
+//   db.close();
+//   if (result[0].rows.length === 0) return console.log('No esta en favoritos');
+//   return console.log('Ya esta en favoritos');
+// };
+
+export const verifySkin = async (skin: Row) => {
   const db = await getDbConnection();
-  const verifyQuery = `SELECT id FROM ${tableName} WHERE id = ${id}`;
+  const verifyQuery = `SELECT id FROM ${tableName} WHERE id = ${Number(
+    skin.c[0].v,
+  )}`;
   const result = await db.executeSql(verifyQuery);
-  if (result[0].rows.length === 0) return console.log('No esta en favoritos');
-  return console.log('Ya esta en favoritos');
+  db.close();
+  if (result[0].rows.length > 0) {
+    skin.c[4].v = 'VERDADERO';
+    return true;
+  } else {
+    return false;
+  }
 };

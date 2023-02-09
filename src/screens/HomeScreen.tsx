@@ -9,8 +9,9 @@ import {
   TouchableOpacity,
   Dimensions,
   View,
+  Button,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import ButtonCustom from '../components/ButtonCustom';
 import {FlashList} from '@shopify/flash-list';
 import {DrawerScreenProps} from '@react-navigation/drawer';
@@ -23,6 +24,9 @@ import {SkinView} from '../components/visorScreen/SkinView';
 import {AuthContext} from '../context/AuthContext';
 import {saveUrlToCameraRoll} from '../helpers/saveToGallery';
 import {deleteSkin, insertSkin} from '../data/DB';
+import * as ImagePicker from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
+import {openUrl, shareSkin, URL} from '../helpers/openUrl';
 
 interface PropsItem {
   item: Row;
@@ -35,8 +39,23 @@ interface Props extends DrawerScreenProps<RootStackParams, 'HomeScreen'> {}
 
 const HomeScreen = ({navigation}: Props) => {
   const {data, setData, isLoading} = useSpreedSheet();
-  //const [stateSkin, setStateSkin] = useState('');
   const {uriSkin, nameSkin, onChange} = useContext(AuthContext);
+  const [skinItem, setSkinItem] = useState<Row>();
+
+  console.log(skinItem);
+
+  const onResponse = async (options: any) => {
+    try {
+      const fileUrl = await RNFS.readFile(options.assets[0].uri, 'base64');
+      onChange(`data:image/png;base64,${fileUrl}`, '');
+    } catch (e) {
+      onChange(uriSkin, nameSkin);
+      console.log(e);
+    }
+  };
+
+  const onSelectSkin = async () =>
+    await ImagePicker.launchImageLibrary({} as any, onResponse);
 
   const handleChange = (skin: Row) => {
     data.find((elem, index) => {
@@ -69,6 +88,7 @@ const HomeScreen = ({navigation}: Props) => {
           onChange(String(item.c[3].v), String(item.c[2].v));
         }}
         iconFavorite={async () => {
+          setSkinItem(item);
           try {
             await insertSkin({
               id: Number(item.c[0].v),
@@ -83,7 +103,7 @@ const HomeScreen = ({navigation}: Props) => {
             console.log('Este skin ya se encuentra en tus favoritos', error);
           }
         }}
-        icono={item.c[4].v === true ? 'heart' : 'heart-outline'}
+        icono={'ellipsis-vertical-outline'}
         iconFuntionRemove={async () => {
           await deleteSkin(Number(item.c[0].v));
           handleChangeRemove(item);
@@ -102,15 +122,28 @@ const HomeScreen = ({navigation}: Props) => {
           }}>
           <Icon name="cloud-download-outline" size={30} color="#fff" />
         </TouchableOpacity>
+        <TouchableOpacity style={styles.Menu} onPress={onSelectSkin}>
+          <Icon name="cloud-upload-outline" size={30} color="#fff" />
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.Menu}
-          onPress={() => navigation.navigate('FavoriteScreen')}>
+          onPress={async () =>
+            await insertSkin({
+              id: Number(skinItem?.c[0].v),
+              nameSkin: String(skinItem?.c[2].v),
+              image: String(skinItem?.c[1].v),
+              downloadImage: String(skinItem?.c[3].v),
+              status: String(skinItem?.c[4].v),
+            })
+          }>
           <Icon name="heart-outline" size={30} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Menu} onPress={navigation.toggleDrawer}>
+        <TouchableOpacity
+          style={styles.Menu}
+          onPress={() => shareSkin(nameSkin, uriSkin)}>
           <Icon name="share-social-outline" size={30} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Menu} onPress={navigation.toggleDrawer}>
+        <TouchableOpacity style={styles.Menu} onPress={() => openUrl(URL)}>
           <Icon name="star-outline" size={30} color="#fff" />
         </TouchableOpacity>
       </View>
@@ -136,6 +169,10 @@ const HomeScreen = ({navigation}: Props) => {
   return (
     <>
       <SkinView alto={height} ancho={width} skin={uriSkin} name={nameSkin} />
+      <Button
+        title="Favoritos"
+        onPress={() => navigation.navigate('FavoriteScreen')}
+      />
       <FlashList
         data={data}
         renderItem={renderItem}

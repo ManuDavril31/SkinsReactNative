@@ -41,7 +41,9 @@ const ButtonCustom = ({
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.iconHeart}
-        onPress={icono === 'heart-outline' ? iconFavorite : iconFuntionRemove}>
+        onPress={
+          icono === 'share-social-outline' ? iconFavorite : iconFuntionRemove
+        }>
         <Icon name={icono} size={25} color="#009688FF" />
       </TouchableOpacity>
     </>
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
   },
   iconHeart: {
     position: 'absolute',
-    right: 15,
-    bottom: 12,
+    right: 12,
+    bottom: 20,
   },
 });
