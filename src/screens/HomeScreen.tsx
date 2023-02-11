@@ -44,6 +44,8 @@ const HomeScreen = ({navigation}: Props) => {
   const [skinItem, setSkinItem] = useState<Row>();
   const {show} = useToast();
 
+  console.log(uriSkin, nameSkin);
+
   const onResponse = async (options: any) => {
     try {
       const fileUrl = await RNFS.readFile(options.assets[0].uri, 'base64');
@@ -52,6 +54,7 @@ const HomeScreen = ({navigation}: Props) => {
       onChange(uriSkin, nameSkin);
     }
   };
+
   const addSkinFavorite = async (item: Row) => {
     try {
       await insertSkin({
@@ -100,6 +103,7 @@ const HomeScreen = ({navigation}: Props) => {
   const renderItem = ({item}: PropsItem) => {
     return (
       <ButtonCustom
+        skin={item}
         title={String(item.c[2].v)}
         image={String(item.c[1].v)}
         key={item.c[0].v.toString()}
@@ -140,7 +144,6 @@ const HomeScreen = ({navigation}: Props) => {
             const message = await saveUrlToCameraRoll([uriSkin]);
             return show(`${message}`, {
               type: 'warning',
-              duration: 2000,
             });
           }}>
           <Icon name="cloud-download-outline" size={30} color="#fff" />
@@ -156,10 +159,12 @@ const HomeScreen = ({navigation}: Props) => {
                 'https://i.postimg.cc/j5wqpNy7/Original-Steve-with-Beard.png' ||
               nameSkin === ''
             ) {
-              return show('No es posible agregar a favoritas esta Skin', {
-                type: 'danger',
-                duration: 2000,
-              });
+              return show(
+                'No es posible agregar a favoritas las Skins cargadas localmente',
+                {
+                  type: 'danger',
+                },
+              );
             }
             await addSkinFavorite(skinItem!);
           }}>

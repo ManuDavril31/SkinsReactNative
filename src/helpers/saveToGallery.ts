@@ -54,7 +54,7 @@ export const saveToGallery = async (files: string[]) => {
     return 'Se completo la descarga correctamente en galeria';
     //return true;
   } catch (err) {
-    return `Error al descargar el Skin, ${err}`;
+    return `No se pueden descargar la Skins subidas localmente, ${err}`;
     //console.error('ERROR: savaFileAsync', err);
   }
 };

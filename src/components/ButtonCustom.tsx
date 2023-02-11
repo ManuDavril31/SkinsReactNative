@@ -10,10 +10,12 @@ import {
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DropDown} from './DropDown';
+import {Row} from '../interfaces/SpreedSheetApi';
 
 const width = Dimensions.get('window').width - 40;
 
 interface Props {
+  skin?: Row;
   title: string;
   image: string;
   icono: string;
@@ -28,6 +30,7 @@ const ButtonCustom = ({
   image,
   icono = 'heart-outline',
   flat,
+  skin,
   funtion,
   iconFavorite,
   iconFuntionRemove,
@@ -45,7 +48,7 @@ const ButtonCustom = ({
       </TouchableOpacity>
       {flat === false ? (
         <View style={styles.iconHeart}>
-          <DropDown />
+          <DropDown skin={skin!} />
         </View>
       ) : (
         <TouchableOpacity

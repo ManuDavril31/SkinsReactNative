@@ -15,7 +15,7 @@ export const URL =
 
 export const shareSkin = async (msg: string, url: string) => {
   const shareOptions = {
-    message: `Encuentra más skins en la siguiente app ${URL}: Nombre: ${msg}, --->`,
+    message: `Encuentra más skins en la siguiente app ${URL}\n Nombre Skin:\n ${msg},\n Link Skin: `,
     url,
   };
   try {
