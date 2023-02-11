@@ -28,7 +28,6 @@ export const saveToGallery = async (files: string[]) => {
   try {
     const result = await Promise.all(
       files.map(async file => {
-        console.log(file);
         const asset = await MediaLibrary.createAssetAsync(file);
         return asset;
       }),
@@ -52,9 +51,11 @@ export const saveToGallery = async (files: string[]) => {
     } else {
       await MediaLibrary.addAssetsToAlbumAsync(result, album, false);
     }
-    return true;
+    return 'Se completo la descarga correctamente en galeria';
+    //return true;
   } catch (err) {
-    console.error('ERROR: savaFileAsync', err);
+    return `Error al descargar el Skin, ${err}`;
+    //console.error('ERROR: savaFileAsync', err);
   }
 };
 
@@ -120,9 +121,10 @@ export const saveUrlToCameraRoll = async (files: string[]) => {
         }
       }),
     );
-    await saveToGallery(results);
-    return true;
+    const message = await saveToGallery(results);
+    return message;
+    //return true;
   } catch (error) {
-    console.log(error, 'saveUrlsToCameraRoll');
+    return `Error al descargar, ${error}`;
   }
 };

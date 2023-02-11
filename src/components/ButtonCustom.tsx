@@ -5,9 +5,11 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  View,
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {DropDown} from './DropDown';
 
 const width = Dimensions.get('window').width - 40;
 
@@ -15,6 +17,7 @@ interface Props {
   title: string;
   image: string;
   icono: string;
+  flat: boolean;
   funtion: () => void;
   iconFavorite: () => void;
   iconFuntionRemove: () => void;
@@ -24,6 +27,7 @@ const ButtonCustom = ({
   title,
   image,
   icono = 'heart-outline',
+  flat,
   funtion,
   iconFavorite,
   iconFuntionRemove,
@@ -39,13 +43,21 @@ const ButtonCustom = ({
         </Text>
         <Image source={{uri: image}} style={styles.ButtonImage} />
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.iconHeart}
-        onPress={
-          icono === 'share-social-outline' ? iconFavorite : iconFuntionRemove
-        }>
-        <Icon name={icono} size={25} color="#009688FF" />
-      </TouchableOpacity>
+      {flat === false ? (
+        <View style={styles.iconHeart}>
+          <DropDown />
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.iconHeart}
+          onPress={
+            icono === 'ellipsis-vertical-outline'
+              ? iconFavorite
+              : iconFuntionRemove
+          }>
+          <Icon name={icono} size={25} color="#009688FF" />
+        </TouchableOpacity>
+      )}
     </>
   );
 };

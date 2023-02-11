@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import WebView from 'react-native-webview';
 import RadioButton from '../RadioButton';
@@ -50,11 +50,11 @@ export const SkinView = ({alto, ancho, skin, name}: Props) => {
     );
   };
 
-  const onResetAll = () => {
-    webRef.current.injectJavaScript(
-      `document.getElementById('skin_url_unset').click(); reloadSkin();`,
-    );
-  };
+  // const onResetAll = () => {
+  //   webRef.current.injectJavaScript(
+  //     `document.getElementById('skin_url_unset').click(); reloadSkin();`,
+  //   );
+  // };
 
   useEffect(() => {
     onResetSkin();
@@ -79,7 +79,7 @@ export const SkinView = ({alto, ancho, skin, name}: Props) => {
         startInLoadingState={true}
         injectedJavaScript={`${canvas}; document.getElementById('skin_url').value = 'https://i.postimg.cc/j5wqpNy7/Original-Steve-with-Beard.png'; reloadSkin();`}
       />
-      <Button title="Reset" onPress={onResetAll} />
+      {/* https://i.postimg.cc/j5wqpNy7/Original-Steve-with-Beard.png */}
     </>
   );
 };

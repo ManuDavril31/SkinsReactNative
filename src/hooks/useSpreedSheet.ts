@@ -8,7 +8,6 @@ const ssid = '1ewIA2E3E0QZVBvVlWR3bdq7D3kqev3EquCJY5QuXZr4';
 const complement = '/gviz/tq?tqx=out:json';
 
 export const useSpreedSheet = () => {
-  console.log('useSpreedSheet');
   const [data, setData] = useState<Row[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,7 +27,6 @@ export const useSpreedSheet = () => {
   };
 
   useEffect(() => {
-    console.log('useSpreedSheet useEffect');
     fetchApi();
   }, []);
 

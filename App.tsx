@@ -4,6 +4,9 @@ import {NavigationContainer} from '@react-navigation/native';
 // import StackNavigation from './src/navigations/StackNavigation';
 import DrawerNavigation from './src/navigations/DrawerNavigation';
 import {AuthProvider} from './src/context/AuthContext';
+
+import {ToastProvider} from 'react-native-toast-notifications';
+
 import {initialDataBase} from './src/data/DB';
 
 export default function App() {
@@ -16,11 +19,13 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      {/* <StackNavigation /> */}
-      <AppState>
-        <DrawerNavigation />
-      </AppState>
-    </NavigationContainer>
+    <ToastProvider>
+      <NavigationContainer>
+        {/* <StackNavigation /> */}
+        <AppState>
+          <DrawerNavigation />
+        </AppState>
+      </NavigationContainer>
+    </ToastProvider>
   );
 }

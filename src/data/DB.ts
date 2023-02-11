@@ -75,6 +75,15 @@ export const getListSkins = async () => {
   return skins;
 };
 
+//OBTENER UN SKIN POR ID
+export const getSkinDB = async (id: number) => {
+  const db = await getDbConnection();
+  const getSkinQuery = `SELECT * FROM ${tableName} WHERE id = ${id}`;
+  const result = await db.executeSql(getSkinQuery);
+  db.close();
+  return result[0].rows.item(0);
+};
+
 // ELIMINAR SKIN DE FAVORITOS
 export const deleteSkin = async (id: number) => {
   const db = await getDbConnection();

@@ -2,12 +2,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import ButtonCustom from '../components/ButtonCustom';
 import {FlashList} from '@shopify/flash-list';
-import {SkinView} from '../components/visorScreen/SkinView';
-import {deleteSkin, getListSkins} from '../data/DB';
+import {deleteSkin, getListSkins, getSkinDB} from '../data/DB';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../navigations/StackNavigation';
-import {Dimensions, Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
+import {useToast} from 'react-native-toast-notifications';
 
 interface PropsItem {
   item: Skins;
@@ -23,12 +23,10 @@ export interface Skins {
 
 interface Props extends StackScreenProps<RootStackParams, 'HomeScreen'> {}
 
-const height = Dimensions.get('window').height / 2 - 50;
-const width = Dimensions.get('window').width; // - 55
-
 const FavoriteScreen = ({navigation}: Props) => {
   const [data, setData] = useState<Skins[]>([]);
-  const {uriSkin, nameSkin} = useContext(AuthContext);
+  const {onChange} = useContext(AuthContext);
+  const {show} = useToast();
 
   // const handleChange = (skin: Row) => {
   //   data.find((elem, index) => {
@@ -54,16 +52,22 @@ const FavoriteScreen = ({navigation}: Props) => {
         title={item.nameSkin}
         image={item.image}
         key={item.id}
-        funtion={() => {
-          // setStateSkin(String(item.c[3].v));
-          //onChange(String(item.c[3].v), String(item.c[2].v));
+        funtion={async () => {
+          const result: Skins = await getSkinDB(item.id);
+          onChange(result.downloadImage, result.nameSkin);
+          navigation.navigate('HomeScreen');
         }}
         iconFavorite={() => {}}
         icono={'trash-outline'}
         iconFuntionRemove={() => {
           deleteSkin(item.id);
+          show('Eliminada correctamente', {
+            type: 'success',
+            duration: 2000,
+          });
           navigation.navigate('HomeScreen');
         }}
+        flat
       />
     );
   };
@@ -111,12 +115,6 @@ const FavoriteScreen = ({navigation}: Props) => {
     <>
       {data.length > 0 ? (
         <>
-          <SkinView
-            alto={height}
-            ancho={width}
-            skin={uriSkin}
-            name={nameSkin}
-          />
           <FlashList
             data={data}
             renderItem={renderItem}
@@ -142,8 +140,6 @@ export default FavoriteScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
   },
