@@ -11,7 +11,7 @@ import {
   View,
   Button,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import ButtonCustom from '../components/ButtonCustom';
 import {FlashList} from '@shopify/flash-list';
 import {DrawerScreenProps} from '@react-navigation/drawer';
@@ -28,6 +28,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import {openUrl, shareSkin, URL} from '../helpers/openUrl';
 import {useToast} from 'react-native-toast-notifications';
+import {Skins} from './FavoriteScreen';
 
 interface PropsItem {
   item: Row;
@@ -40,11 +41,11 @@ interface Props extends DrawerScreenProps<RootStackParams, 'HomeScreen'> {}
 
 const HomeScreen = ({navigation}: Props) => {
   const {data, setData, isLoading} = useSpreedSheet();
-  const {uriSkin, nameSkin, onChange} = useContext(AuthContext);
-  const [skinItem, setSkinItem] = useState<Row>();
+  const {uriSkin, nameSkin, focusSkin, onChange, onChangeSkin} =
+    useContext(AuthContext);
   const {show} = useToast();
 
-  console.log(uriSkin, nameSkin);
+  console.log(focusSkin);
 
   const onResponse = async (options: any) => {
     try {
@@ -55,16 +56,26 @@ const HomeScreen = ({navigation}: Props) => {
     }
   };
 
-  const addSkinFavorite = async (item: Row) => {
+  const addSkinFavorite = async ({
+    id,
+    nameSkin: name,
+    image,
+    downloadImage,
+    status,
+  }: Skins) => {
     try {
       await insertSkin({
-        id: Number(item.c[0].v),
-        nameSkin: String(item.c[2].v),
-        image: String(item.c[1].v),
-        downloadImage: String(item.c[3].v),
-        status: String(item.c[4].v),
+        // id: Number(item.c[0].v),
+        // nameSkin: String(item.c[2].v),
+        // image: String(item.c[1].v),
+        // downloadImage: String(item.c[3].v),
+        // status: String(item.c[4].v),
+        id,
+        nameSkin: name,
+        image,
+        downloadImage,
+        status,
       });
-      // handleChange(item);
       show('Agregado a favoritos correctamente', {
         type: 'success',
         duration: 2000,
@@ -109,7 +120,15 @@ const HomeScreen = ({navigation}: Props) => {
         key={item.c[0].v.toString()}
         funtion={() => {
           onChange(String(item.c[3].v), String(item.c[2].v));
-          setSkinItem(item);
+          //setSkinItem(item);
+          onChangeSkin({
+            id: Number(item.c[0].v),
+            image: String(item.c[1].v),
+            nameSkin: String(item.c[2].v),
+            downloadImage: String(item.c[3].v),
+            status: String(item.c[4].v),
+          });
+
           //await addSkinFavorite(item);
         }}
         iconFavorite={() => {}}
@@ -166,7 +185,7 @@ const HomeScreen = ({navigation}: Props) => {
                 },
               );
             }
-            await addSkinFavorite(skinItem!);
+            await addSkinFavorite(focusSkin!);
           }}>
           <Icon name="heart-outline" size={30} color="#fff" />
         </TouchableOpacity>
@@ -192,7 +211,7 @@ const HomeScreen = ({navigation}: Props) => {
       // title: `${nameSkin}`,
       headerRight: () => renderIconsMenu(),
     });
-  }, [uriSkin]);
+  }, [uriSkin, focusSkin]);
 
   if (isLoading) {
     return <ActivityIndicator size={100} color="#FFF" />;

@@ -1,6 +1,7 @@
 import React, {createContext, useState} from 'react';
 import {useSpreedSheet} from '../hooks/useSpreedSheet';
 import {Row} from '../interfaces/SpreedSheetApi';
+import {Skins} from '../screens/FavoriteScreen';
 //Definir como luce, que informacion tendre aquí
 // export interface AuthState {
 //   uriSkin: string;
@@ -17,6 +18,8 @@ export interface AuthContextProps {
   nameSkin: string;
   data: Row[];
   isLoading: boolean;
+  focusSkin?: Skins;
+  onChangeSkin: (skin: Skins) => void;
   onChange: (skin: string, name: string) => void;
   setData: (skins: Row[]) => void;
 }
@@ -24,7 +27,7 @@ export interface AuthContextProps {
 interface SkinsProps
   extends Omit<
     AuthContextProps,
-    'onChange' | 'data' | 'isLoading' | 'setData'
+    'onChange' | 'data' | 'isLoading' | 'setData' | 'focusSkin' | 'onChangeSkin'
   > {}
 
 //Creamos el context
@@ -36,6 +39,7 @@ export const AuthContext = createContext({} as AuthContextProps);
 // Componente proveedor del estado
 export const AuthProvider = ({children}: any) => {
   const {data, isLoading, setData} = useSpreedSheet();
+  const [focusSkin, setFocusSkin] = useState<Skins>();
   const [skinUrl, setSkinUrl] = useState<SkinsProps>({
     uriSkin: 'https://i.postimg.cc/j5wqpNy7/Original-Steve-with-Beard.png',
     nameSkin: 'STEVE',
@@ -44,6 +48,10 @@ export const AuthProvider = ({children}: any) => {
 
   const onChange = (skin: string = uriSkin, name: string = nameSkin) => {
     setSkinUrl({uriSkin: skin, nameSkin: name});
+  };
+
+  const onChangeSkin = (skin: Skins) => {
+    setFocusSkin(skin);
   };
 
   return (
@@ -55,6 +63,8 @@ export const AuthProvider = ({children}: any) => {
         onChange,
         setData,
         isLoading,
+        focusSkin,
+        onChangeSkin,
       }}>
       {children}
     </AuthContext.Provider>

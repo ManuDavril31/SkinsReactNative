@@ -25,7 +25,7 @@ interface Props extends StackScreenProps<RootStackParams, 'HomeScreen'> {}
 
 const FavoriteScreen = ({navigation}: Props) => {
   const [data, setData] = useState<Skins[]>([]);
-  const {onChange} = useContext(AuthContext);
+  const {onChange, onChangeSkin} = useContext(AuthContext);
   const {show} = useToast();
 
   // const handleChange = (skin: Row) => {
@@ -55,6 +55,7 @@ const FavoriteScreen = ({navigation}: Props) => {
         funtion={async () => {
           const result: Skins = await getSkinDB(item.id);
           onChange(result.downloadImage, result.nameSkin);
+          onChangeSkin(item);
           navigation.navigate('HomeScreen');
         }}
         iconFavorite={() => {}}
